@@ -42,9 +42,7 @@ with open('preprocess.data', 'w', encoding='UTF-8') as f_preprocess:
     for QA in TQA:
         f_preprocess.write("%s\n" % (QA.question))
         for i in range(0, len(QA.answer)):
-            f_preprocess.write("%s %s\n" % (str(QA.answer[i]), str(QA.flag[i])))
+            f_preprocess.write("%s\t%s\n" % (str(QA.answer[i]), str(QA.flag[i])))
         f_preprocess.write("\n")
 
 TQA[0].showQA()
-
-
