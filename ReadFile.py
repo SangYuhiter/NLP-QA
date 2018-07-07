@@ -71,5 +71,3 @@ def read_preprocess_data():
 preprocess_data()
 TQA[0].showQA()
 write_preprocess_data(TQA)
-
-
