@@ -4,8 +4,8 @@ import math
 
 
 # 获取N连字符串字频
-def get_N_word_frequency(N):
-    word_dict = DataStatistics.calculate_data_word_frequency(N)
+def get_N_word_frequency(TQA, N):
+    word_dict = DataStatistics.calculate_data_word_frequency(TQA, N)
     return word_dict
 
 
@@ -70,21 +70,21 @@ def write_QA_sentence_frequency(N,list):
         i += 1
     print("%d\t%f" % (N, correctAnsNum/i))
 
+if __name__=="__main__":
+    TQA = ReadFile.read_preprocess_data()   # 获取预处理数据结果
+    # 去除空格
+    for QA in TQA:
+        QA.question = QA.question.replace(" ", "")
+        for i in range(len(QA.answer)):
+            QA.answer[i] = QA.answer[i].replace(" ", "")
+    # 输出N连的几种情况
+    for N in range(1, 2):
+        word_dict = get_N_word_frequency(TQA, N)
+        # 获取总字频
+        word_frequency = DataStatistics.calculate_word_total_frequency(word_dict)
+        # 计算并输出N连情况下的问答情况：问句答句是否正确及正确率
+        write_QA_sentence_frequency(N, calculate_QA_sentence_frequency(N))
 
-TQA = ReadFile.read_preprocess_data()   # 获取预处理数据结果
-# 去除空格
-for QA in TQA:
-    QA.question = QA.question.replace(" ", "")
-    for i in range(len(QA.answer)):
-        QA.answer[i] = QA.answer[i].replace(" ", "")
-# 输出N连的几种情况
-for N in range(1, 2):
-    word_dict = get_N_word_frequency(N)
-    # 获取总字频
-    word_frequency = DataStatistics.calculate_word_total_frequency(word_dict)
-    # 计算并输出N连情况下的问答情况：问句答句是否正确及正确率
-    write_QA_sentence_frequency(N, calculate_QA_sentence_frequency(N))
 
 
-
-# DataStatistics.write_statistic_data(word_dict)
+    # DataStatistics.write_statistic_data(word_dict)

@@ -1,9 +1,11 @@
+# -*- coding:UTF-8 -*-
+
 import ReadFile
-TQA = ReadFile.read_preprocess_data()   # 读入QA数据
+
 
 
 # 统计问句单字字频，使用字典结构，若键不存在则添加键，并将键值设为1，若存在，则键值加1
-def calculate_question_word_frequency():
+def calculate_question_word_frequency(TQA):
     word_dict = {}
     for QA in TQA:
         for word in QA.question:
@@ -15,7 +17,7 @@ def calculate_question_word_frequency():
 
 
 # 统计答句单字字频，同统计问句单字字频
-def calculate_answer_word_frequency():
+def calculate_answer_word_frequency(TQA):
     word_dict = {}
     for QA in TQA:
         for answer in QA.answer:
@@ -28,7 +30,7 @@ def calculate_answer_word_frequency():
 
 
 # 统计文本字频:N:连续字数
-def calculate_data_word_frequency(N):
+def calculate_data_word_frequency(TQA, N):
     # 去除空格
     for QA in TQA:
         QA.question = QA.question.replace(" ", "")
@@ -83,8 +85,10 @@ def write_statistic_data(word_dict):
         print(data)
 
 
-# 测试代码，输出字符统计结果，N代表N连字符,ctrl+/注释或撤销注释
-# write_statistic_data(calculate_question_word_frequency())
-# write_statistic_data(calculate_answer_word_frequency())
-# write_statistic_data(calculate_data_word_frequency())
+if __name__=="__main__":
+    TQA=ReadFile.read_preprocess_data()
+    # 测试代码，输出字符统计结果，N代表N连字符,ctrl+/注释或撤销注释
+    # write_statistic_data(calculate_question_word_frequency(TQA))
+    # write_statistic_data(calculate_answer_word_frequency(TQA))
+    # write_statistic_data(calculate_data_word_frequency(TQA, N))
 

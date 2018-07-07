@@ -14,13 +14,10 @@ class TrainQA(object):
         for i in range(0, len(self.answer)):
             print("%s\t%s\n" % (self.answer[i], self.flag[i]))
 
-
-TQA = []    # TQA结构，存储QA
-
-
 # 预处理数据：读入数据，写入特定的数据结构，去除特殊字符，去除首尾空格
 def preprocess_data():
     # 读取训练数据到列表list_training
+    TQA=[]
     with open('training.data', 'r', encoding='UTF-8') as f_training:
         list_training = f_training.readlines()
 
@@ -48,7 +45,7 @@ def preprocess_data():
         # 上一个QA输入结束--添加下一个QA
         else:
             TQA.append(QA)
-
+    return TQA
 
 # 将预处理完成的数据写入preprocess.data
 def write_preprocess_data(TQA):
@@ -60,6 +57,7 @@ def write_preprocess_data(TQA):
 
 # 将preprocess.data的数据读出到特定的数据结构TQA
 def read_preprocess_data():
+    TQA=[]
     with open('preprocess.data', 'r', encoding='UTF-8') as f_preprocess:
         list_preprocess = f_preprocess.readlines()
     for record in list_preprocess:
@@ -78,10 +76,14 @@ def read_preprocess_data():
             TQA[len(TQA) - 1].flag.append(data[2].rstrip())
         else:
             TQA.append(QA)
+    print (TQA.__len__())
     return TQA
 
 
-# 测试代码，输出每个QA，将预处理的结果写到preprocess.data,ctrl+/注释或撤销注释
-# preprocess_data()
-# TQA[0].showQA()
-# write_preprocess_data(TQA)
+if __name__=="__name__":
+    TQA=[]
+    # 测试代码，输出每个QA，将预处理的结果写到preprocess.data,ctrl+/注释或撤销注释
+    #preprocess_data()
+    # TQA[0].showQA()
+    # write_preprocess_data(TQA)
+
