@@ -1,13 +1,7 @@
 import ReadFile
+import CutWord
 import DataStatistics
 import math
-
-
-# 获取N连字符串字频
-def get_N_word_frequency(TQA, N):
-    word_dict = DataStatistics.calculate_data_word_frequency(TQA, N)
-    return word_dict
-
 
 # N_gram_QA_frequency结构，存储句子相似度结果
 class N_gram_QA_frequency(object):
@@ -21,12 +15,14 @@ class N_gram_QA_frequency(object):
 # 计算N-gram句子概率
 def calculate_N_gram_sentence_frequency(sentence, N):
     sentence_frequency = 0
-    for i in range(len(sentence) - N + 1):
+    sentence_words = sentence.split(',')
+    for i in range(len(sentence_words) - N + 1):
         word_num = N
         word = ''
         j = i
         while word_num > 0:
-            word += sentence[j]
+            word += ' '
+            word += sentence_words[j]
             j += 1
             word_num -= 1
         # 计算公式log加
@@ -35,7 +31,7 @@ def calculate_N_gram_sentence_frequency(sentence, N):
 
 
 # 计算QA的问句答句频率
-def calculate_QA_sentence_frequency(TQA, N):
+def calculate_QA_sentence_frequency(N):
     N_gram_TQA_frequency = []   # 存储所有QA的概率值
     for QA in TQA:
         QA_frequency = N_gram_QA_frequency()    # 新建数据结构N_gram_QA_frequency存储一个QA的概率值
@@ -64,7 +60,7 @@ def write_QA_sentence_frequency(N,list):
     for QA in list:
         index = find_similarity_sentence(QA)
         print("%d\t%s\n" % (i, TQA[i].question))
-        print("最相似的句子序号:%d\t频率：%f\t%s\t%s\n" % (index , QA.answer[index], TQA[i].answer[index], TQA[i].flag[index]))
+        print("最相似的句子序号:%d\t频率：%f\t%s\t%s\n" % (index, QA.answer[index], TQA[i].answer[index], TQA[i].flag[index]))
         if TQA[i].flag[index] == '1':
             correctAnsNum += 1
         i += 1
@@ -78,16 +74,14 @@ def write_answer_score(N_gram_TQA_frequency):
             for answer in QA.answer:
                 f_score.write("%f\n" % (1-math.fabs(QA.question-answer)))
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     filename = 'develop.data'
     TQA = ReadFile.preprocess_data(filename)  # 获取预处理数据结果
-    # 输出N连的几种情况
-    for N in range(1, 9):
-        # 获取字频
-        word_dict = DataStatistics.calculate_data_word_frequency(TQA, N)
+    TQA = CutWord.CutWord(TQA)
+    for N in range(1, 5):
+        word_dict = DataStatistics.calculate_data_words_frequency(TQA, N)
         # 获取总字频
         word_frequency = DataStatistics.calculate_word_total_frequency(word_dict)
-        # 计算并输出N连情况下的问答情况：问句答句是否正确及正确率,针对develop.data
-        write_QA_sentence_frequency(N, calculate_QA_sentence_frequency(TQA, N))
+        # 计算并输出N连情况下的问答情况：问句答句是否正确及正确率
+        write_QA_sentence_frequency(N, calculate_QA_sentence_frequency(N))
         # write_answer_score(calculate_QA_sentence_frequency(N))
